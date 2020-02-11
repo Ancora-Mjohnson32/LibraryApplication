@@ -1,0 +1,98 @@
+﻿<!--Allows Intellisence and compile time error checking-->
+<!--Using a HomeDetailsViewModel depricates this, data now requires
+    interaction with HDVM instead of Book   (8)
+    (razor)model LibraryApplication.Models.Book-->
+<!--Moved Name space LibraryApplication.ViewModels to ViewImports-->
+@model HomeDetailsViewModel
+
+
+<!--
+    //Any other data not of type string must be explicitly converted.
+    //Book data is stored in LibraryApplications.Model of type Book.
+    //--------------------------Used for ViewData from HomeController, Viewbag is done on object reference below(7)
+    (razor syntax)  var book = ViewData["Book"] as LibraryApplication.Models.Book;
+-->
+<!--ViewData uses this function to retrieve string keys
+ Title: (razor)book.Title
+ View Data alters this to (razor)Viewbag.Book.Title
+ --------ViewBag use dynamic properties to tell data type(7)
+ ViewBag, Error Prone. Pass Model data via the View(model) function. "loosely typed"
+ Alters code implementation from this--
+ Title: (razor)ViewBag.Book.Title
+ To this(8)
+ Title: (razor)Model.Title
+ -----razor model directive implementation allows InteliSense to catch errors and
+ allows compile time error checking "strongly typed"-->
+<!--Using a HDVM requires us to state the object this data is now coming from   (8)
+Title: (razor)Model.Title-->
+
+<div class="row justify-content-center m-3">
+    <div class="col-sm-8">
+        <div class="card">
+            <div class="card-header">
+                <h1>@Model.Book.Title</h1>
+            </div>
+
+            <div class="card-body text-center">
+                <div class="row">
+                    <div class="col-md-5 book-display">
+                        <img class="card-img-top" src="~/images/noimage.jpg" 
+                             asp-append-version="true"/>
+                    </div>
+                    <div class="col-md-7">
+                        <h4>Book ID : @Model.Book.Id</h4>
+                        <h4>Book Title : @Model.Book.Title</h4>
+                        <h4>Author : @Model.Book.Author</h4>
+                        <h4>Genre : @Model.Book.Genre</h4>
+                        <h4>Pages : @Model.Book.PageCount</h4>
+                        <h4>Series : @Model.Book.Series (Book# @Model.Book.BookNumber)</h4>
+
+                    </div>
+                 </div>                
+                <h4>
+                    Sub Genre :<!--Broken-->
+                    @{ 
+                            @Model.Book.SubGenre
+                    }
+
+                </h4>
+                <h4>Overview : @Model.Book.Overview</h4>
+            </div>
+
+            <div class="card-footer text-center">
+                <a asp-controller="home" asp-action="browse" class="btn btn-primary">Back</a>
+                <a href="#" class="btn btn-warning">Edit</a>
+                <a href="#" class="btn btn-danger">Delete</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+<!--
+    <div>
+        Title: Model.Book.Title
+    </div>
+    <div>
+        Author: Model.Book.Author
+    </div>
+    <div>
+        Genre: Model.Book.Genre
+    </div>
+    <div>
+        Sub Genre: Model.Book.SubGenre
+    </div>
+    <div>
+        Pages: Model.Book.PageCount
+    </div>
+    <div>
+        Series: Model.Book.Series (Book# Model.Book.BookNumber)
+    </div>
+    <div>
+        Overview: Model.Book.Overview
+    </div>
+            -->
