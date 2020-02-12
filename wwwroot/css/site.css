@@ -80,3 +80,13 @@ body {
     max-height: 750px;
     max-width: 375px;
 }
+
+.imageThumbnail {
+    height:200px;
+    width:auto;
+}
+
+.browse-row-objects {
+    min-width: 18rem;
+    max-width: 30.5%;
+}

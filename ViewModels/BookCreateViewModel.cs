@@ -1,4 +1,5 @@
 ﻿using LibraryApplication.Models;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -25,7 +26,7 @@ namespace LibraryApplication.ViewModels
         public int BookNumber { get; set; }
         [Required]
         public string Overview { get; set; }
-        public string PhotoPath { get; set; }
+        public IFormFile Photo { get; set; }
 
     }
 }

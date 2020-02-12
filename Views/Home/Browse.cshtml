@@ -10,14 +10,16 @@
 <div class="card-deck">
     @foreach (var book in Model)
     {
-        <div class="card m-3">
+            var photoPath = "~/images/" + (book.PhotoPath ?? "noimage.jpg");
+
+        <div class="card m-3 browse-row-objects">
             <!--A Class needs altered to display Title/Author with max height?
                 Larger titles cause display to distort and look poor un-uniform-->
             <div class="card-header">
                 <h5>@book.Title</h5>
                 <p>by: @book.Author</p>
             </div>
-            <img class="card-img-top" src="~/images/noimage.jpg" 
+            <img class="card-img-top imageThumbnail" src="@photoPath" 
                  asp-append-version="true"/>
             <div class="card-footer text-center">
                 <a asp-controller="home" asp-action="details" asp-route-id="@book.Id"
