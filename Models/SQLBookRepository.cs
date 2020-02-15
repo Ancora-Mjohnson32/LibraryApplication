@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,10 +9,12 @@ namespace LibraryApplication.Models
     public class SQLBookRepository : IBookRepository
     {
         private readonly AppDbContext context;
+        private readonly ILogger<SQLBookRepository> logger;
 
-        public SQLBookRepository(AppDbContext context)
+        public SQLBookRepository(AppDbContext context, ILogger<SQLBookRepository> logger)
         {
             this.context = context;
+            this.logger = logger;
         }
 
         public Book Add(Book book)
@@ -39,6 +42,13 @@ namespace LibraryApplication.Models
 
         public Book GetBook(int Id)
         {
+            logger.LogTrace("Trace Log");
+            logger.LogDebug("Debug Log");
+            logger.LogInformation("Information Log");
+            logger.LogWarning("Warning Log");
+            logger.LogError("Error Log");
+            logger.LogCritical("Critical Log");
+
             return context.Books.Find(Id);
         }
 

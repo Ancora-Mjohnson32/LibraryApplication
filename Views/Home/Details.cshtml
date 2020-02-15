@@ -64,7 +64,8 @@ Title: (razor)Model.Title-->
 
             <div class="card-footer text-center">
                 <a asp-controller="home" asp-action="browse" class="btn btn-primary">Back</a>
-                <a href="#" class="btn btn-warning">Edit</a>
+                <a asp-action="edit" asp-controller="home"
+                   asp-route-id="@Model.Book.Id" class="btn btn-warning">Edit</a>
                 <a href="#" class="btn btn-danger">Delete</a>
             </div>
         </div>
