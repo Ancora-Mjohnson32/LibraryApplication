@@ -17,7 +17,7 @@ namespace LibraryApplication.Models
                 new Book() { Id = 1, 
                     Title = "The Two Towers", 
                     Author = "J.R.R. Tolkien", 
-                    Genre = Genres.Fantasy, 
+                    Genre = Genres.Fiction, 
                     SubGenre = Genres.Fiction | Genres.Classics | Genres.Adventure | Genres.ScienceFictionFantasy | Genres.FantasyEpicFantasy | Genres.FantasyHighFantasy | Genres.Novels | Genres.FantasyMagic, 
                     PageCount = 322, 
                     Series = "The Lord of the Rings", 

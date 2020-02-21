@@ -73,6 +73,12 @@ namespace LibraryApplication.Controllers
                     PhotoPath = uniqueFileName
                 };
 
+                /*newBook.CheckBoxSubs = new List<EnumModel>();
+                foreach (Genres sub in Enum.GetValues(typeof(Genres)))
+                {
+                    newBook.CheckBoxSubs.Add(new EnumModel() { Sub = sub, IsSelected = false });
+                }*/
+
                 _bookRepository.Add(newBook);
                 return RedirectToAction("details", new { id = newBook.Id });
             }
@@ -96,6 +102,13 @@ namespace LibraryApplication.Controllers
                 Overview = book.Overview,
                 ExistingPhotoPath = book.PhotoPath
             };
+
+            /*book.CheckBoxSubs = new List<EnumModel>();
+            foreach (Genres sub in Enum.GetValues(typeof(Genres)))
+            {
+            book.CheckBoxSubs.Add(new EnumModel() { Sub = sub, IsSelected = false });
+            }*/
+
             return View(bookEditViewModel);
         }
 
@@ -123,6 +136,12 @@ namespace LibraryApplication.Controllers
                    book.PhotoPath = ProcessUploadedFile(model);
 
                 }
+
+                /*book.CheckBoxSubs = new List<EnumModel>();
+                foreach (Genres sub in Enum.GetValues(typeof(Genres)))
+                {
+                book.CheckBoxSubs.Add(new EnumModel() { Sub = sub, IsSelected = false });
+                }*/
 
                 _bookRepository.Update(book);
                 return RedirectToAction("browse");

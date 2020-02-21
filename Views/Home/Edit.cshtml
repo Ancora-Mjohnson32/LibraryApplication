@@ -41,6 +41,7 @@
             <select multiple asp-for="SubGenre" class="custom-select mr-sm-2 chosen-select" asp-items="Html.GetEnumSelectList<Genres>()">
                 <option value="">Please Select</option>
                 <!--{
+                    DO NOT USE FOREACH IN RAZOR... USE FOR TO LOOP
                     foreach (Genres Genre in (Genres[])Enum.GetValues(typeof(Genres)))
                     {
                         <option>Genre</option>

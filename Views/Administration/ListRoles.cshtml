@@ -1,18 +1,20 @@
 ﻿@model IEnumerable<IdentityRole>
 
+
 @{
     ViewBag.Title = "All Roles";
 }
 
 <h1>All Roles</h1>
 
+<a class="btn btn-primary mb-3" style="width:auto" asp-action="CreateRole"
+   asp-controller="administration">Add new role</a>
+
+
 @if (Model.Any())
 {
     foreach (var role in Model)
     {
-        <a class="btn btn-primary mb-3" style="width:auto" asp-action="CreateRole"
-           asp-controller="administration">Add new role</a>
-
         <div class="card mb-3">
             <div class="card-header">
                 Role Id : @role.Id
@@ -21,11 +23,29 @@
                 <h5 class="card-title">@role.Name</h5>
             </div>
             <div class="card-footer">
-                <a class="btn btn-primary" asp-action="EditRole"
-                        asp-controller="Administration" asp-route-id="@role.Id">
-                Edit
-                </a>
-                <a href="#" class="btn btn-danger">Delete</a>
+                <form asp-action="DeleteRole" asp-route-id="@role.Id" method="post">
+                    @if ((await authorizationService.AuthorizeAsync(User, "EditRolePolicy")).Succeeded)
+                    {
+                        <a class="btn btn-primary" asp-action="EditRole"
+                           asp-controller="Administration" asp-route-id="@role.Id">
+                            Edit
+                        </a>
+                    }
+                    @if ((await authorizationService.AuthorizeAsync(User, "DeleteRolePolicy")).Succeeded)
+                    {
+                        <span id="confirmDeleteSpan_@role.Id" style="display:none">
+                            <span>Are you you want to delete?</span>
+                            <button type="submit" class="btn btn-danger">Yes</button>
+                            <a href="#" class="btn btn-primary"
+                               onclick="confirmDelete('@role.Id', false)">No</a>
+                        </span>
+
+                        <span id="deleteSpan_@role.Id">
+                            <a href="#" class="btn btn-danger"
+                               onclick="confirmDelete('@role.Id', true)">Delete</a>
+                        </span>
+                    }
+                </form>
             </div>
         </div>
     }
@@ -46,4 +66,8 @@ else
             </a>
         </div>
     </div>
+}
+
+@section Scripts {
+    <script src="~/js/site.js"></script>
 }

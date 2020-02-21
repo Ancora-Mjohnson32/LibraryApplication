@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using LibraryApplication.Security;
 
 namespace LibraryApplication
 {
@@ -43,10 +44,40 @@ namespace LibraryApplication
                 options.Filters.Add(new AuthorizeFilter(policy));
             }).AddXmlDataContractSerializerFormatters();
 
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.AccessDeniedPath = new Microsoft.AspNetCore.Http.PathString("/Administration/AccessDenied");
+            });
+
+            services.AddAuthorization(options =>
+            {
+                //need to declare permission on methods per controller
+                options.AddPolicy("DeleteRolePolicy",
+                    policy => policy.RequireAssertion(context =>
+                    context.User.IsInRole("Admin") &&
+                    context.User.HasClaim(claim => claim.Type == "Delete Role" && claim.Value == "true") ||
+                    context.User.IsInRole("Super Admin")
+                    ));
+
+                options.AddPolicy("EditRolePolicy",
+                    policy => policy.AddRequirements( new ManageAdminRolesAndClaimsRequirement()));
+                
+                options.AddPolicy("AdminRolePolicy",
+                    policy => policy.RequireRole("Admin", "Super Admin"));
+
+            });
+
             services.AddControllersWithViews();
             //Sets up an instance of MockBookRepository for the HomeController to use. (5)
             //(DO NOT IMPLEMENT THIS FUNCTION ON A CONTROLLER)
             services.AddScoped<IBookRepository, SQLBookRepository>();
+
+            services.AddSingleton<IAuthorizationHandler,
+                   CanEditOnlyOtherAdminRolesAndClaimsHandler>();
+
+            services.AddSingleton<IAuthorizationHandler,
+                    SuperAdminHandler>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -17,7 +17,7 @@ namespace LibraryApplication.Models
                 Title = "The Two Towers",
                 Author = "J.R.R. Tolkien",
                 Genre = Genres.Fantasy,
-                SubGenre = Genres.Fiction & Genres.Classics & Genres.Adventure & Genres.ScienceFictionFantasy & Genres.FantasyEpicFantasy & Genres.FantasyHighFantasy & Genres.Novels & Genres.FantasyMagic,
+                SubGenre = Genres.Fiction | Genres.Classics | Genres.Adventure | Genres.ScienceFictionFantasy | Genres.FantasyEpicFantasy | Genres.FantasyHighFantasy | Genres.Novels | Genres.FantasyMagic,
                 PageCount = 322,
                 Series = "The Lord of the Rings",
                 BookNumber = 2,

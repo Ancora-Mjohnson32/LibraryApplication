@@ -17,6 +17,7 @@ namespace LibraryApplication.Models
         [Required]
         public Genres? Genre { get; set; }
         [Display(Name = "Sub Genre")]
+        ///public List<EnumModel> CheckBoxSubs { get; set; }
         public Genres SubGenre { get; set; }
         [Required]
         [Display(Name = "Page Count")]

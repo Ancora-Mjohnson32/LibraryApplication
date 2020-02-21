@@ -21,6 +21,12 @@ namespace LibraryApplication.Models
             //move seed data to ModelBuilderExtensions class
             base.OnModelCreating(modelBuilder);
             modelBuilder.seed();
+
+            foreach (var foreignKey in modelBuilder.Model.GetEntityTypes()
+                .SelectMany(e => e.GetForeignKeys()))
+            {
+                foreignKey.DeleteBehavior = DeleteBehavior.Restrict;
+            }
         }
     }
 }

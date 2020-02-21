@@ -37,11 +37,24 @@
                 <select multiple asp-for="SubGenre" class="custom-select mr-sm-2 chosen-select" asp-items="Html.GetEnumSelectList<Genres>()">
                     <option value="">Please Select</option>
                     <!--{
-                    foreach (Genres Genre in (Genres[])Enum.GetValues(typeof(Genres)))
-                    {
-                        <option>Genre</option>
-                    }
-                }-->
+                        DO NOT USE FOREACH IN RAZOR... USE FOR TO LOOP
+            foreach (Genres Genre in (Genres[])Enum.GetValues(typeof(Genres)))
+            {
+                <option>Genre</option>
+            }
+
+
+
+
+                 for (int i = 0; i < Model.CheckBoxSubs.Count; i++)
+    {
+        Html.DisplayFor(m => m.CheckBoxSubs[i].Sub);
+        Html.CheckBoxFor(m => m.CheckBoxSubs[i].IsSelected);
+        Html.HiddenFor(m => m.CheckBoxSubs[i].Sub);
+    }
+
+
+        }-->
                 </select>
             </div>
         </div>
