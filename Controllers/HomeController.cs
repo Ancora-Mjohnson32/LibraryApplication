@@ -17,13 +17,13 @@ namespace LibraryApplication.Controllers
     public class HomeController : Controller
     {
         private readonly IBookRepository _bookRepository; //readonly prevents accidental re-assign value with other methods
-        private readonly IHostingEnvironment hostingEnvironment;
+        private readonly IWebHostEnvironment hostingEnvironment;
         private readonly ILogger logger;
 
         //Allows the HomeController to access the IBookRepository(needs instance in startup not here)(4)
         //Use only 1 instance of HomeController... Couple more functions with ","
         public HomeController(IBookRepository bookRepository,
-                              IHostingEnvironment hostingEnvironment, ILogger<HomeController> logger)
+                              IWebHostEnvironment hostingEnvironment, ILogger<HomeController> logger)
         {
             _bookRepository = bookRepository;
             this.hostingEnvironment = hostingEnvironment;
@@ -48,12 +48,14 @@ namespace LibraryApplication.Controllers
         }
 
         [HttpGet]
+        [Authorize(Policy = "CreateBookPolicy")]
         public IActionResult AddBook()
         {
             return View();
         }
 
         [HttpPost]
+        [Authorize(Policy = "CreateBookPolicy")]
         public IActionResult AddBook(BookCreateViewModel model)
         {
             if (ModelState.IsValid)
@@ -85,8 +87,11 @@ namespace LibraryApplication.Controllers
             return View();
         }
 
+
         [HttpGet]
-        public IActionResult Edit(int id)
+        [Authorize(Policy = "EditBookPolicy")]
+
+        public ViewResult Edit(int id)
         {
             Book book = _bookRepository.GetBook(id);
             BookEditViewModel bookEditViewModel = new BookEditViewModel
@@ -113,6 +118,7 @@ namespace LibraryApplication.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "EditBookPolicy")]
         public IActionResult Edit(BookEditViewModel model)
         {
             if (ModelState.IsValid)
@@ -166,6 +172,54 @@ namespace LibraryApplication.Controllers
 
             return uniqueFileName;
         }
+
+        [HttpGet]
+        [Authorize(Policy = "DeleteBookPolicy")]
+        public IActionResult DeleteBook(int? id)
+        {
+            logger.LogTrace("Trace Log");
+            logger.LogDebug("Debug Log");
+            logger.LogInformation("Information Log");
+            logger.LogWarning("Warning Log");
+            logger.LogError("Error Log");
+            logger.LogCritical("Critical Log");
+
+            Book book = _bookRepository.GetBook(id.Value);
+            if (book == null)
+            {
+                Response.StatusCode = 404;
+                return View("BookNotFound", id.Value);
+            }
+
+            HomeDetailsViewModel homeDetailsViewModel = new HomeDetailsViewModel()
+            {
+                Book = book,
+                PageTitle = _bookRepository.GetBook(id ?? 1).Title
+            };
+            return View(homeDetailsViewModel);
+        }
+
+
+        [HttpPost]
+        [Authorize(Policy = "DeleteBookPolicy")]
+        public IActionResult DeleteBook(int id)
+        {
+            Book book = _bookRepository.GetBook(id);
+
+
+            if (book == null)
+            {
+                ViewBag.ErrorMessage = $"Book with Id = {id} cannot be found";
+                return View("NotFound");
+            }
+            else
+            {
+                _bookRepository.Delete(id);
+
+                return RedirectToAction("browse");
+            }
+        }
+
 
         [AllowAnonymous]
         public IActionResult Details(int? id)

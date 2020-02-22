@@ -1,6 +1,9 @@
 ﻿<!--Moved Namespace to ViewImports-->
 @model IEnumerable<Book>
+@inject SignInManager<ApplicationUser> SignInManager;
 @inject IBookRepository _bkRepository
+
+
 @{ViewBag.Title = "Browse"; }
 <div class="row">
     <div class="col-sm-10">
@@ -10,7 +13,7 @@
 <div class="card-deck">
     @foreach (var book in Model)
     {
-            var photoPath = "~/images/" + (book.PhotoPath ?? "noimage.jpg");
+        var photoPath = "~/images/" + (book.PhotoPath ?? "noimage.jpg");
 
         <div class="card m-3 browse-row-objects">
             <!--A Class needs altered to display Title/Author with max height?
@@ -19,14 +22,32 @@
                 <h5>@book.Title</h5>
                 <p>by: @book.Author</p>
             </div>
-            <img class="card-img-top imageThumbnail" src="@photoPath" 
-                 asp-append-version="true"/>
+            <img class="card-img-top imageThumbnail" src="@photoPath"
+                 asp-append-version="true" />
             <div class="card-footer text-center">
                 <a asp-controller="home" asp-action="details" asp-route-id="@book.Id"
                    class="btn btn-primary m-1">View</a>
-                <a asp-action="edit" asp-controller="home"
-                   asp-route-id="@book.Id" class="btn btn-warning m-1">Edit</a>
-                <a href="#" class="btn btn-danger m-1">Delete</a>
+
+                @{
+                    if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin") &&
+                        User.HasClaim(claim => claim.Type == "Delete Book" && claim.Value == "true") &&
+                        User.HasClaim(claim => claim.Type == "Edit Book" && claim.Value == "true") ||
+                            SignInManager.IsSignedIn(User) && User.IsInRole("Super Admin"))
+                    {
+                        <a asp-action="edit" asp-controller="home"
+                           asp-route-id="@book.Id" class="btn btn-warning m-1">Edit</a>
+                        <a asp-action="deletebook" asp-controller="home" asp-route-id="@book.Id" class="btn btn-danger m-1">Delete</a>
+
+                    }
+                    else if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin") &&
+                        User.HasClaim(claim => claim.Type == "Edit Book" && claim.Value == "true"))
+                    {
+                        <a asp-action="Edit" asp-controller="home"
+                           asp-route-id="@book.Id" class="btn btn-warning">Edit</a>
+                    }
+                }
+
+
             </div>
         </div>
     }

@@ -59,6 +59,26 @@ namespace LibraryApplication
                     context.User.IsInRole("Super Admin")
                     ));
 
+                options.AddPolicy("EditBookPolicy", policy => policy.RequireAssertion(context =>
+                    context.User.IsInRole("Admin") &&
+                    context.User.HasClaim(claim => claim.Type == "Edit Book" && claim.Value == "true") ||
+                    context.User.IsInRole("Super Admin")
+                    ));
+
+                options.AddPolicy("CreateBookPolicy", policy => policy.RequireAssertion(context =>
+                    context.User.IsInRole("Admin") &&
+                    context.User.HasClaim(claim => claim.Type == "Create Book" && claim.Value == "true") ||
+                    context.User.IsInRole("Super Admin")
+                    ));
+
+                options.AddPolicy("DeleteBookPolicy", policy => policy.RequireAssertion(context =>
+                    context.User.IsInRole("Admin") &&
+                    context.User.HasClaim(claim => claim.Type == "Delete Book" && claim.Value == "true") ||
+                    context.User.IsInRole("Super Admin")
+                    ));
+
+
+
                 options.AddPolicy("EditRolePolicy",
                     policy => policy.AddRequirements( new ManageAdminRolesAndClaimsRequirement()));
                 

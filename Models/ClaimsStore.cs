@@ -10,9 +10,13 @@ namespace LibraryApplication.Models
     {
         public static List<Claim> AllClaims = new List<Claim>()
     {
-        new Claim("Create Role", "Create Role"),
-        new Claim("Edit Role","Edit Role"),
-        new Claim("Delete Role","Delete Role")
+            new Claim("Create Role", "Create Role"),
+            new Claim("Edit Role","Edit Role"),
+            new Claim("Delete Role","Delete Role"),
+
+            new Claim("Delete Book", "Delete Book"),
+            new Claim("Edit Book", "Edit Book"),
+            new Claim("Create Book", "Create Book")
     };
     }
 }
