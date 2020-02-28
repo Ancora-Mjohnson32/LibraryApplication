@@ -90,3 +90,8 @@ body {
     min-width: 18rem;
     max-width: 30.5%;
 }
+
+.MLR {
+    margin-left: .25rem;
+    margin-right: .25rem;
+}

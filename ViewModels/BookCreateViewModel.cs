@@ -16,9 +16,6 @@ namespace LibraryApplication.ViewModels
         public string Author { get; set; }
         [Required]
         public Genres? Genre { get; set; }
-        [Display(Name = "Sub Genre")]
-        //public List<EnumModel> CheckBoxSubs { get; set; }
-        public Genres SubGenre { get; set; }
         [Required]
         [Display(Name = "Page Count")]
         public int PageCount { get; set; }
@@ -28,6 +25,8 @@ namespace LibraryApplication.ViewModels
         [Required]
         public string Overview { get; set; }
         public IFormFile Photo { get; set; }
+        public bool Available { get; set; }
+        public string RentalUserId { get; set; }
 
     }
 }

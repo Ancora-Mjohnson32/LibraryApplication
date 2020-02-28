@@ -32,7 +32,10 @@ namespace LibraryApplication.Models
         YoungAdultYoungAdultFantasy = 1 << 12,
         Childrens = 1 << 13,
         [Display(Name = "Childrens > Middle Grade")]
-        ChildrensMiddleGrade = 1 << 14
+        ChildrensMiddleGrade = 1 << 14,
+        Business = 1 << 15,
+        Leadership = 1 << 16,
+        Romance = 1 << 17
     }   
 
     /*public class Genres

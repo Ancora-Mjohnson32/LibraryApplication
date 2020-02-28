@@ -65,22 +65,26 @@
                         <li class="nav-item">
                             <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Browse">Browse</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Return">Return</a>
+                        </li>
+
                         @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin") || SignInManager.IsSignedIn(User) && User.IsInRole("Super Admin"))
                         {
                             <li class="nav-item dropdown">
-                              <a class="nav-link text-light dropdown-toggle" href="#" id="navbarDropdownMenuLink"
-                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                  Manage
-                              </a>
-                              <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                  <a asp-area="" asp-controller="Home" asp-action="AddBook" class="dropdown-item">Add Book</a>
-                                  <a asp-controller="Administration" asp-action="ListRoles" class="dropdown-item">
-                                      Roles
-                                  </a>
-                                  <a asp-controller="Administration" asp-action="ListUsers" class="dropdown-item">
-                                      Users
-                                  </a>
-                              </div>
+                                <a class="nav-link text-light dropdown-toggle" href="#" id="navbarDropdownMenuLink"
+                                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Manage
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                    <a asp-area="" asp-controller="Home" asp-action="AddBook" class="dropdown-item">Add Book</a>
+                                    <a asp-controller="Administration" asp-action="ListRoles" class="dropdown-item">
+                                        Roles
+                                    </a>
+                                    <a asp-controller="Administration" asp-action="ListUsers" class="dropdown-item">
+                                        Users
+                                    </a>
+                                </div>
                             </li>
                         }
                     </ul>

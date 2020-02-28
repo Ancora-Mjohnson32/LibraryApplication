@@ -8,7 +8,7 @@ namespace LibraryApplication.ViewModels
 {//Create a 'View Model' when a Model object does not contain all the data a view needs
     public class HomeDetailsViewModel
     {
-        //Cleans up our Details method in HomeController(8)
+        //Cleans up Details method in HomeController(8)
         public Book Book { get; set; }
         public string PageTitle { get; set; }
     }

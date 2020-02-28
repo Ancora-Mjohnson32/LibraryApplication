@@ -18,7 +18,6 @@ namespace LibraryApplication.Models
                     Title = "The Two Towers", 
                     Author = "J.R.R. Tolkien", 
                     Genre = Genres.Fiction, 
-                    SubGenre = Genres.Fiction | Genres.Classics | Genres.Adventure | Genres.ScienceFictionFantasy | Genres.FantasyEpicFantasy | Genres.FantasyHighFantasy | Genres.Novels | Genres.FantasyMagic, 
                     PageCount = 322, 
                     Series = "The Lord of the Rings", 
                     BookNumber = 2, 
@@ -27,7 +26,6 @@ namespace LibraryApplication.Models
                     Title = "Eldest", 
                     Author = "Christopher Paolini", 
                     Genre = Genres.Fantasy, 
-                    SubGenre = Genres.YoungAdult | Genres.Fiction | Genres.FantasyDragons | Genres.FantasyMagic | Genres.Adventure | Genres.FantasyHighFantasy | Genres.Fantasy | Genres.FantasyEpicFantasy | Genres.ScienceFictionFantasy | Genres.YoungAdultYoungAdultFantasy, 
                     PageCount = 704, 
                     Series = "The Inheritance Cycle", 
                     BookNumber = 2, 
@@ -36,7 +34,6 @@ namespace LibraryApplication.Models
                     Title = "Harry Potter and the Prisoner of Azkaban", 
                     Author = "J.K. Rowling", 
                     Genre = Genres.Fantasy, 
-                    SubGenre = Genres.YoungAdult | Genres.Fiction | Genres.FantasyMagic | Genres.Childrens | Genres.Adventure | Genres.ChildrensMiddleGrade | Genres.Classics | Genres.ScienceFictionFantasy, 
                     PageCount = 435, 
                     Series = "Harry Potter", 
                     BookNumber = 3, 
@@ -45,7 +42,6 @@ namespace LibraryApplication.Models
                     Title = "",
                     Author = "",
                     Genre = "",
-                    SubGenre = "",
                     PageCount = 0,
                     Series = "",
                     BookNumber = 0,
@@ -91,7 +87,6 @@ namespace LibraryApplication.Models
                book.Title = bookChanges.Title;
                 book.Author = bookChanges.Author;
                 book.Genre = bookChanges.Genre;
-                book.SubGenre = bookChanges.SubGenre;
                 book.PageCount = bookChanges.PageCount;
                 book.Series = bookChanges.Series;
                 book.BookNumber = bookChanges.BookNumber;

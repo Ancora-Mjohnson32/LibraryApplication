@@ -48,7 +48,6 @@ namespace LibraryApplication.Models
             logger.LogWarning("Warning Log");
             logger.LogError("Error Log");
             logger.LogCritical("Critical Log");
-
             return context.Books.Find(Id);
         }
 

@@ -37,6 +37,17 @@ Title: (razor)Model.Title-->
         <div class="card">
             <div class="card-header">
                 <h1>@Model.Book.Title</h1>
+                @{ 
+                    if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin") ||
+                       SignInManager.IsSignedIn(User) && User.IsInRole("Super Admin"))
+                    {
+                        if(Model.Book.Available == false)
+                        {
+                            <h5>Book currently being rented out to user with ID: @Model.Book.RentalUserId</h5>
+                        }
+                    }
+
+                }
             </div>
 
             <div class="card-body text-center">
@@ -55,25 +66,46 @@ Title: (razor)Model.Title-->
 
                     </div>
                 </div>
-                <h4>
-                    Sub Genre :
-                    @{
-                        @Model.Book.SubGenre
-                    }
-
-                </h4>
                 <h4>Overview : @Model.Book.Overview</h4>
             </div>
 
             <div class="card-footer text-center">
-                <a asp-controller="home" asp-action="browse" class="btn btn-primary">Back</a>
+                <div style="display:inline-flex">
+                    <div style="margin-right:.25rem">
+                        <a asp-controller="home" asp-action="browse" class="btn btn-primary">Back</a>
+                    </div>
+
+                    @{
+                        if (SignInManager.IsSignedIn(User) && !User.IsInRole("Admin"))
+                        {
+                            <form class="MLR" method="post" asp-action="Reserve" asp-controller="Home" asp-route-id="@Model.Book.Id">
+                                <button type="submit" class="btn btn-success" style="width:auto">
+                                    <span></span>Reserve
+                                </button>
+                            </form>
+                        }
+                    }
+
+
+                    @{
+                        if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin") ||
+                         SignInManager.IsSignedIn(User) && User.IsInRole("Super Admin"))
+
+                        {
+                            <form style="margin-left:.25rem" method="post" asp-action="ReturnBook" asp-controller="Home" asp-route-id="@Model.Book.Id">
+                                <button type="submit" class="btn btn-info">Return</button>
+                            </form>
+                        }
+                    }
+                </div>
+
                 @{
                     if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin") &&
                         User.HasClaim(claim => claim.Type == "Delete Book" && claim.Value == "true") &&
                         User.HasClaim(claim => claim.Type == "Edit Book" && claim.Value == "true") ||
                             SignInManager.IsSignedIn(User) && User.IsInRole("Super Admin"))
                     {
-                        <form asp-action="DeleteBook" asp-route-id="@Model.Book.Id" method="post">
+                        <form asp-action="DeleteBook" asp-route-id="@Model.Book.Id" method="post" style="padding-top:.5rem">
                             <a asp-action="Edit" asp-controller="home"
                                asp-route-id="@Model.Book.Id" class="btn btn-warning">Edit</a>
                             <span id="confirmDeleteSpan_@Model.Book.Id" style="display:none">
@@ -92,8 +124,8 @@ Title: (razor)Model.Title-->
                     else if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin") &&
                         User.HasClaim(claim => claim.Type == "Edit Book" && claim.Value == "true"))
                     {
-                            <a asp-action="Edit" asp-controller="home"
-                               asp-route-id="@Model.Book.Id" class="btn btn-warning">Edit</a>
+                        <a asp-action="Edit" asp-controller="home"
+                           asp-route-id="@Model.Book.Id" class="btn btn-warning">Edit</a>
                     }
                 }
             </div>
@@ -102,30 +134,3 @@ Title: (razor)Model.Title-->
 </div>
 
 
-
-
-
-
-<!--
-    <div>
-        Title: Model.Book.Title
-    </div>
-    <div>
-        Author: Model.Book.Author
-    </div>
-    <div>
-        Genre: Model.Book.Genre
-    </div>
-    <div>
-        Sub Genre: Model.Book.SubGenre
-    </div>
-    <div>
-        Pages: Model.Book.PageCount
-    </div>
-    <div>
-        Series: Model.Book.Series (Book# Model.Book.BookNumber)
-    </div>
-    <div>
-        Overview: Model.Book.Overview
-    </div>
-            -->

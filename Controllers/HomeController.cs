@@ -10,6 +10,7 @@ using LibraryApplication.ViewModels;
 using Microsoft.AspNetCore.Hosting;
 using System.IO;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace LibraryApplication.Controllers
 {
@@ -19,15 +20,19 @@ namespace LibraryApplication.Controllers
         private readonly IBookRepository _bookRepository; //readonly prevents accidental re-assign value with other methods
         private readonly IWebHostEnvironment hostingEnvironment;
         private readonly ILogger logger;
+        private readonly UserManager<ApplicationUser> userManager;
 
         //Allows the HomeController to access the IBookRepository(needs instance in startup not here)(4)
         //Use only 1 instance of HomeController... Couple more functions with ","
         public HomeController(IBookRepository bookRepository,
-                              IWebHostEnvironment hostingEnvironment, ILogger<HomeController> logger)
+                              IWebHostEnvironment hostingEnvironment, 
+                              ILogger<HomeController> logger,
+                              UserManager<ApplicationUser> userManager)
         {
             _bookRepository = bookRepository;
             this.hostingEnvironment = hostingEnvironment;
             this.logger = logger;
+            this.userManager = userManager;
             //_bookRepository = new MockBookRepository();    <----BAD CODE. use Startup.
 
         }
@@ -46,6 +51,56 @@ namespace LibraryApplication.Controllers
             var model = _bookRepository.GetAllBooks();
             return View(model);
         }
+
+
+
+        [HttpPost]
+        public IActionResult Reserve(int id)
+        {
+            var userid = userManager.GetUserId(User);
+            Book book = _bookRepository.GetBook(id);
+
+
+            if (book == null)
+            {
+                ViewBag.ErrorMessage = $"Book with Id = {id} cannot be found";
+                return View("NotFound");
+            }
+            else
+            {
+
+                book.RentalUserId = userid;
+
+                book.Available = false;
+
+                _bookRepository.Update(book);
+                return RedirectToAction("browse");
+            }
+        }
+
+
+        [HttpPost]
+        public IActionResult ReturnBook(int id)
+        {
+            Book book = _bookRepository.GetBook(id);
+
+
+            if (ModelState.IsValid)
+            {
+                book.RentalUserId = null;
+
+                book.Available = true;
+
+                _bookRepository.Update(book);
+            }
+            return RedirectToAction("browse");
+        }
+
+        public IActionResult Return()
+        {
+            return View();
+        }
+
 
         [HttpGet]
         [Authorize(Policy = "CreateBookPolicy")]
@@ -67,19 +122,13 @@ namespace LibraryApplication.Controllers
                     Title = model.Title,
                     Author = model.Author,
                     Genre = model.Genre,
-                    SubGenre = model.SubGenre,
                     PageCount = model.PageCount,
                     Series = model.Series,
                     BookNumber = model.BookNumber,
                     Overview = model.Overview,
                     PhotoPath = uniqueFileName
+                   
                 };
-
-                /*newBook.CheckBoxSubs = new List<EnumModel>();
-                foreach (Genres sub in Enum.GetValues(typeof(Genres)))
-                {
-                    newBook.CheckBoxSubs.Add(new EnumModel() { Sub = sub, IsSelected = false });
-                }*/
 
                 _bookRepository.Add(newBook);
                 return RedirectToAction("details", new { id = newBook.Id });
@@ -100,7 +149,6 @@ namespace LibraryApplication.Controllers
                 Title = book.Title,
                 Author = book.Author,
                 Genre = book.Genre,
-                SubGenre = book.SubGenre,
                 PageCount = book.PageCount,
                 Series = book.Series,
                 BookNumber = book.BookNumber,
@@ -108,11 +156,6 @@ namespace LibraryApplication.Controllers
                 ExistingPhotoPath = book.PhotoPath
             };
 
-            /*book.CheckBoxSubs = new List<EnumModel>();
-            foreach (Genres sub in Enum.GetValues(typeof(Genres)))
-            {
-            book.CheckBoxSubs.Add(new EnumModel() { Sub = sub, IsSelected = false });
-            }*/
 
             return View(bookEditViewModel);
         }
@@ -127,7 +170,6 @@ namespace LibraryApplication.Controllers
                 book.Title = model.Title;
                 book.Author = model.Author;
                 book.Genre = model.Genre;
-                book.SubGenre = model.SubGenre;
                 book.PageCount = model.PageCount;
                 book.Series = model.Series;
                 book.BookNumber = model.BookNumber;
@@ -142,12 +184,6 @@ namespace LibraryApplication.Controllers
                    book.PhotoPath = ProcessUploadedFile(model);
 
                 }
-
-                /*book.CheckBoxSubs = new List<EnumModel>();
-                foreach (Genres sub in Enum.GetValues(typeof(Genres)))
-                {
-                book.CheckBoxSubs.Add(new EnumModel() { Sub = sub, IsSelected = false });
-                }*/
 
                 _bookRepository.Update(book);
                 return RedirectToAction("browse");
@@ -254,6 +290,7 @@ namespace LibraryApplication.Controllers
             };
             return View(homeDetailsViewModel);
         }
+
 
         [AllowAnonymous]
         public IActionResult Privacy()
